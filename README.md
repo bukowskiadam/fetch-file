@@ -14,6 +14,11 @@ Of course, it has to be cross-compiled to my Kindle 3 Keyboard (armv6l)
 go run . <url> <output file>
 ```
 
+## Binary
+
+I've included the binary file in the [`dist`](dist) directory,
+so you don't have to build it on your own.
+
 ## Cross compile
 
 I ran this on Mac OS with apple silicon.
