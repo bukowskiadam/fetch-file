@@ -18,12 +18,21 @@ go run . <url> <output file>
 
 I ran this on Mac OS with apple silicon.
 
-**NOTE: It does not work for my kindle. I get a segmentation fault. I fixed this using an older version of go and build image. I'll update this soon.**
+**NOTE: I used some ancient version of golang and docker image**
 
-```bash
-docker run --platform "linux/amd64" --rm -v (pwd):/go/src -w /go/src docker.elastic.co/beats-dev/golang-crossbuild:1.19.1-armel --build-cmd "go mod init;go mod tidy;go build" -p "linux/armv6"
 ```
+docker run -it --platform "linux/amd64" --rm \
+  -v (pwd):/go/src \
+  -w /go/src \
+  docker.elastic.co/beats-dev/golang-crossbuild:1.10.8-arm \
+  --build-cmd "go build -ldflags=\"-s -w\"" \
+  -p "linux/armv6"
+```
+
+I was trying to save some MB with linker flags to strip the debugging information.
+You can remove `-ldflags=\"-s -w\"` from the command above if you wish.
 
 Based on:
 - https://github.com/elastic/golang-crossbuild/issues/113
 - https://github.com/elastic/golang-crossbuild
+- https://words.filippo.io/shrink-your-go-binaries-with-this-one-weird-trick/
