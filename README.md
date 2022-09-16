@@ -16,6 +16,10 @@ go run . <url> <output file>
 
 ## Cross compile
 
+I ran this on Mac OS with apple silicon.
+
+**NOTE: It does not work for my kindle. I get a segmentation fault. I fixed this using an older version of go and build image. I'll update this soon.**
+
 ```bash
 docker run --platform "linux/amd64" --rm -v (pwd):/go/src -w /go/src docker.elastic.co/beats-dev/golang-crossbuild:1.19.1-armel --build-cmd "go mod init;go mod tidy;go build" -p "linux/armv6"
 ```
