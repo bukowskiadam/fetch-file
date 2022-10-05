@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -16,16 +17,35 @@ func main() {
 		log.Fatalln("Missing output filename parameter!")
 	}
 
-	resp, err := http.Get(os.Args[1])
+	for retries := 3; retries > 0; retries -= 1 {
+		resp, err := http.Get(os.Args[1])
 
-	if err != nil {
-		log.Fatalln(err)
+		if err != nil {
+			os.Exit(1)
+		}
+
+		if resp.StatusCode != 200 {
+			continue
+		}
+
+		body, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+
+		if err != nil {
+			os.Exit(1)
+		}
+
+		os.WriteFile(os.Args[2], body, 0644)
+
+		nextRefresh := resp.Header.Get("X-Next-Refresh")
+
+		if nextRefresh == "" {
+			nextRefresh = "60"
+		}
+		fmt.Println(nextRefresh)
+
+		os.Exit(0)
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	os.WriteFile(os.Args[2], body, 0644)
+	os.Exit(1)
 }
