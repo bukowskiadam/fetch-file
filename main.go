@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -23,21 +22,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	file, err := os.Create(os.Args[2])
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	bytes, err := file.Write(body)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Wrote %d bytes\n", bytes)
+	os.WriteFile(os.Args[2], body, 0644)
 }

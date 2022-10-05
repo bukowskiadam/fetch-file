@@ -10,8 +10,15 @@ Of course, it has to be cross-compiled to my Kindle 3 Keyboard (armv6l)
 
 ## Run locally
 
+Install the right version of go (make sure your `$HOME/go/bin` is in `$PATH`)
+
 ```bash
-go run . <url> <output file>
+go install golang.org/dl/go1.18.6@latest
+go1.18.6 download
+```
+
+```bash
+go1.18.6 run . <url> <output file>
 ```
 
 ## Binary
@@ -23,13 +30,13 @@ so you don't have to build it on your own.
 
 I ran this on Mac OS with apple silicon.
 
-**NOTE: I used some ancient version of golang and docker image**
+**NOTE: I used an older version of golang and docker image, because the latest one didn't work**
 
 ```
 docker run -it --platform "linux/amd64" --rm \
   -v (pwd):/go/src \
   -w /go/src \
-  docker.elastic.co/beats-dev/golang-crossbuild:1.10.8-arm \
+  docker.elastic.co/beats-dev/golang-crossbuild:1.18.6-armel \
   --build-cmd "go build -ldflags=\"-s -w\"" \
   -p "linux/armv6"
 ```
