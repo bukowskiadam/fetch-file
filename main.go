@@ -39,10 +39,9 @@ func main() {
 
 		nextRefresh := resp.Header.Get("X-Next-Refresh")
 
-		if nextRefresh == "" {
-			nextRefresh = "60"
+		if len(nextRefresh) > 0 {
+			fmt.Println(nextRefresh)
 		}
-		fmt.Println(nextRefresh)
 
 		os.Exit(0)
 	}
